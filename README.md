@@ -2,7 +2,11 @@
 ### Requirements
 + Supports Linux only.
 + Geany should be installed.
-### Installation
+### Install Dependencies
+```
+sudo apt install libgtk-3-dev intltool
+```
+### Install Plugin
 ```
 git clone https://github.com/sayanmedya/GeanyDiscordPresence.git
 cd GeanyDiscordPresence
