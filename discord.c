@@ -42,7 +42,7 @@ void updPresence(GeanyDocument *doc) {
     /* Updates discord presence */
 	DiscordRichPresence discordPresence;
     memset(&discordPresence, 0, sizeof(discordPresence));
-    char name[1024], full_name[1024], buffer[2096];
+    char name[1024], full_name[1024], buffer[1096], tpe[20], dir[1024], d_buffer[1096];
     sprintf(full_name, "%s", DOC_FILENAME(doc));
     int l = strlen(full_name), ni, fni;
     for (fni = l - 1, ni = 0;fni >= 0;fni--) {
@@ -63,7 +63,6 @@ void updPresence(GeanyDocument *doc) {
     else if (fni == 0)
         discordPresence.state = "In /";
     else {
-        char dir[1024], d_buffer[1096];
         int di = 0;
         fni--;
         for (ni = 0;fni >= 0;fni--) {
@@ -82,21 +81,20 @@ void updPresence(GeanyDocument *doc) {
         discordPresence.state = d_buffer;
     }
     discordPresence.startTimestamp = time(0);
-    char type[20];
-    strcpy(type, filetypes_get_display_name(doc->file_type));
-    if (strcmp(type, "C++") == 0) {
+    sprintf(tpe, "%s", filetypes_get_display_name(doc->file_type));
+    if (strcmp(tpe, "C++") == 0) {
         discordPresence.largeImageKey = "cpp";
         discordPresence.largeImageText = "C++";
     }
-    else if (strcmp(type, "C") == 0) {
+    else if (strcmp(tpe, "C") == 0) {
         discordPresence.largeImageKey = "c";
         discordPresence.largeImageText = "C";
     }
-    else if (strcmp(type, "Python") == 0) {
+    else if (strcmp(tpe, "Python") == 0) {
         discordPresence.largeImageKey = "python";
         discordPresence.largeImageText = "Python";
     }
-    else if (strcmp(type, "Java") == 0) {
+    else if (strcmp(tpe, "Java") == 0) {
         discordPresence.largeImageKey = "java";
         discordPresence.largeImageText = "Java";
     }
