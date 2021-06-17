@@ -1,4 +1,3 @@
-// Handles discord-rpc related functions
 // Adapted from https://github.com/discord/discord-rpc/blob/master/examples/send-presence/send-presence.c
 
 #define _CRT_SECURE_NO_WARNINGS
@@ -40,14 +39,71 @@ void discordInit()
 }
 
 void updPresence(GeanyDocument *doc) {
-    char buffer[1024];
+    /* Updates discord presence */
 	DiscordRichPresence discordPresence;
     memset(&discordPresence, 0, sizeof(discordPresence));
-    sprintf(buffer, "Editing %s", DOC_FILENAME(doc));
-	discordPresence.details = buffer;
+    char name[1024], full_name[1024], buffer[2096];
+    sprintf(full_name, "%s", DOC_FILENAME(doc));
+    int l = strlen(full_name), ni, fni;
+    for (fni = l - 1, ni = 0;fni >= 0;fni--) {
+        if (full_name[fni] == '/')
+            break;
+        name[ni++] = full_name[fni];
+    }
+    name[ni] = '\0';
+    int k = strlen(name);
+    for (int i = 0;i < k/2;i++) {
+       char temp = name[i];
+       name[i] = name[k - 1 - i];
+       name[k - 1 - i] = temp;
+    }
+    sprintf(buffer, "Editing %s", name);
+    discordPresence.details = buffer;
+    if (fni < 0) {}
+    else if (fni == 0)
+        discordPresence.state = "In /";
+    else {
+        char dir[1024], d_buffer[1096];
+        int di = 0;
+        fni--;
+        for (ni = 0;fni >= 0;fni--) {
+            if (full_name[fni] == '/')
+                break;
+            dir[di++] = full_name[fni];
+        }
+        dir[di] = '\0';
+        k = strlen(dir);
+        for (int i = 0;i < k/2;i++) {
+            char temp = dir[i];
+            dir[i] = dir[k - 1 - i];
+            dir[k - 1 - i] = temp;
+        }
+        sprintf(d_buffer, "In %s", dir);
+        discordPresence.state = d_buffer;
+    }
     discordPresence.startTimestamp = time(0);
-    discordPresence.largeImageKey = "cpp";
-    discordPresence.largeImageText = "C++";
+    char type[20];
+    strcpy(type, filetypes_get_display_name(doc->file_type));
+    if (strcmp(type, "C++") == 0) {
+        discordPresence.largeImageKey = "cpp";
+        discordPresence.largeImageText = "C++";
+    }
+    else if (strcmp(type, "C") == 0) {
+        discordPresence.largeImageKey = "c";
+        discordPresence.largeImageText = "C";
+    }
+    else if (strcmp(type, "Python") == 0) {
+        discordPresence.largeImageKey = "python";
+        discordPresence.largeImageText = "Python";
+    }
+    else if (strcmp(type, "Java") == 0) {
+        discordPresence.largeImageKey = "java";
+        discordPresence.largeImageText = "Java";
+    }
+    else {
+        discordPresence.largeImageKey = "none";
+        discordPresence.largeImageText = "File";
+    }
     discordPresence.smallImageKey = "geany_logo";
     discordPresence.smallImageText = "Geany";
 	Discord_UpdatePresence(&discordPresence);
