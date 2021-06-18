@@ -11,8 +11,8 @@ static void on_document_activate(GObject *obj, GeanyDocument *doc, gpointer user
 static gboolean drpc_init(GeanyPlugin *plugin, gpointer pdata)
 {
     /* Initiate discord rpc */
-	discordInit();
-	plugin_signal_connect(plugin, NULL, "document-activate", 
+    discordInit();
+    plugin_signal_connect(plugin, NULL, "document-activate", 
                             TRUE, G_CALLBACK(on_document_activate), NULL); // listen for active document changes
     printf("Discord Presence Plugin: Starting Plugin\n");
     return TRUE;
@@ -21,7 +21,7 @@ static gboolean drpc_init(GeanyPlugin *plugin, gpointer pdata)
 static void drpc_cleanup(GeanyPlugin *plugin, gpointer pdata)
 {
     /* Cleanup discord rpc */
-	Discord_Shutdown();
+    Discord_Shutdown();
     printf("Discord Presence Plugin: Stopping Plugin\n");
 }
 

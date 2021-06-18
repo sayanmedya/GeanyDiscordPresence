@@ -40,7 +40,7 @@ void discordInit()
 
 void updPresence(GeanyDocument *doc) {
     /* Updates discord presence */
-	DiscordRichPresence discordPresence;
+    DiscordRichPresence discordPresence;
     memset(&discordPresence, 0, sizeof(discordPresence));
     char name[1024], full_name[1024], buffer[1096], tpe[20], dir[1024], d_buffer[1096];
     sprintf(full_name, "%s", DOC_FILENAME(doc));
@@ -88,7 +88,7 @@ void updPresence(GeanyDocument *doc) {
     }
     else if (strcmp(tpe, "C") == 0) {
         discordPresence.largeImageKey = "c";
-        discordPresence.largeImageText = "C";
+        discordPresence.largeImageText = "C Language";
     }
     else if (strcmp(tpe, "Python") == 0) {
         discordPresence.largeImageKey = "python";
